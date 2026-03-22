@@ -58,6 +58,19 @@
                         BorderBrush="{StaticResource BorderBrush}"
                         BorderThickness="0">
                         <UniformGrid VerticalAlignment="Center" Columns="2">
+                            <TextBlock VerticalAlignment="Center" Text="{ns:Loc LblType}" />
+                            <ComboBox
+                                Height="25"
+                                Margin="5,0,0,0"
+                                ItemsSource="{Binding SnapImageTypes}"
+                                SelectedItem="{Binding Source={StaticResource ProfileService}, Path=ActiveProfile.SnapShotControlSettings.ImageType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </UniformGrid>
+                    </Border>
+                    <Border
+                        MinHeight="30"
+                        BorderBrush="{StaticResource BorderBrush}"
+                        BorderThickness="0">
+                        <UniformGrid VerticalAlignment="Center" Columns="2">
                             <TextBlock VerticalAlignment="Center" Text="{ns:Loc LblFilter}" />
                             <ComboBox
                                 Height="25"

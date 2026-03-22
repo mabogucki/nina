@@ -23,6 +23,8 @@ using NINA.Profile.Interfaces;
 using NINA.ViewModel.ImageHistory;
 using NINA.WPF.Base.Interfaces.Mediator;
 using System;
+using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -176,6 +178,27 @@ namespace NINA.ViewModel.Imaging {
 
             set {
                 profileService.ActiveProfile.SnapShotControlSettings.ExposureDuration = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private ObservableCollection<string> _snapImageTypes;
+
+        public ObservableCollection<string> SnapImageTypes {
+            get {
+                if (_snapImageTypes == null) {
+                    _snapImageTypes = new ObservableCollection<string>();
+
+                    Type type = typeof(CaptureSequence.ImageTypes);
+                    foreach (var p in type.GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static)) {
+                        var v = p.GetValue(null);
+                        _snapImageTypes.Add(v.ToString());
+                    }
+                }
+                return _snapImageTypes;
+            }
+            set {
+                _snapImageTypes = value;
                 RaisePropertyChanged();
             }
         }
@@ -334,7 +357,7 @@ namespace NINA.ViewModel.Imaging {
             LiveViewEnabled = true;
             _liveViewCts = new CancellationTokenSource();
             try {
-                var seq = new CaptureSequence(SnapExposureDuration, ImageTypes.SNAPSHOT, SnapFilter, SnapBin, 1);
+                var seq = new CaptureSequence(SnapExposureDuration, profileService.ActiveProfile.SnapShotControlSettings.ImageType, SnapFilter, SnapBin, 1);
                 seq.EnableSubSample = SnapSubSample;
                 seq.SubSambleRectangle = SubSampleRectangle;
                 seq.Gain = SnapGain;
@@ -374,7 +397,7 @@ namespace NINA.ViewModel.Imaging {
                 var savedFullImageWhileLooping = false;
                 var count = 0;
                 do {
-                    var seq = new CaptureSequence(SnapExposureDuration, ImageTypes.SNAPSHOT, SnapFilter, SnapBin, 1);
+                    var seq = new CaptureSequence(SnapExposureDuration, profileService.ActiveProfile.SnapShotControlSettings.ImageType, SnapFilter, SnapBin, 1);
                     seq.EnableSubSample = SnapSubSample;
                     seq.SubSambleRectangle = SubSampleRectangle;
                     seq.Gain = SnapGain;
@@ -397,7 +420,7 @@ namespace NINA.ViewModel.Imaging {
                     if (SnapSave) {
                         progress.Report(new ApplicationStatus() { Status = Loc.Instance["LblSavingImage"] });
                         await imageSaveMediator.Enqueue(imageData, prepareTask, progress, _captureImageToken.Token);
-                        imageHistoryVM.Add(imageData.MetaData.Image.Id, await imageData.Statistics, ImageTypes.SNAPSHOT);
+                        imageHistoryVM.Add(imageData.MetaData.Image.Id, await imageData.Statistics, profileService.ActiveProfile.SnapShotControlSettings.ImageType);
                     }
 
                     if (!SnapSubSample && !savedFullImageWhileLooping) {

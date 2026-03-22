@@ -1,7 +1,7 @@
 #region "copyright"
 
 /*
-    Copyright © 2016 - 2026 Stefan Berg <isbeorn86+NINA@googlemail.com> and the N.I.N.A. contributors
+    Copyright Â© 2016 - 2026 Stefan Berg <isbeorn86+NINA@googlemail.com> and the N.I.N.A. contributors
 
     This file is part of N.I.N.A. - Nighttime Imaging 'N' Astronomy.
 
@@ -18,6 +18,7 @@ namespace NINA.Profile.Interfaces {
 
     public interface ISnapShotControlSettings : ISettings {
         double ExposureDuration { get; set; }
+        string ImageType { get; set; }
         int Gain { get; set; }
         FilterInfo Filter { get; set; }
         bool Save { get; set; }

@@ -19,6 +19,7 @@ using System.Runtime.Serialization;
 namespace NINA.Profile {
 
     public class SnapShotControlSettings : Settings, ISnapShotControlSettings {
+        private const string DefaultImageType = "SNAPSHOT";
 
         [OnDeserializing]
         public void OnDeserializing(StreamingContext context) {
@@ -28,6 +29,7 @@ namespace NINA.Profile {
         protected override void SetDefaultValues() {
             gain = -1;
             exposureDuration = 1;
+            imageType = DefaultImageType;
             filter = null;
             loop = false;
             save = false;
@@ -67,6 +69,19 @@ namespace NINA.Profile {
             set {
                 if (exposureDuration != value) {
                     exposureDuration = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
+        private string imageType;
+
+        [DataMember]
+        public string ImageType {
+            get => string.IsNullOrWhiteSpace(imageType) ? DefaultImageType : imageType;
+            set {
+                if (imageType != value) {
+                    imageType = value;
                     RaisePropertyChanged();
                 }
             }

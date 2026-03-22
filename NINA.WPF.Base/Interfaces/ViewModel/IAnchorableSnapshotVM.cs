@@ -13,6 +13,8 @@
 #endregion "copyright"
 
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using NINA.Core.Utility;
@@ -34,6 +36,7 @@ namespace NINA.WPF.Base.Interfaces.ViewModel {
         BinningMode SnapBin { get; set; }
         IAsyncCommand SnapCommand { get; }
         double SnapExposureDuration { get; set; }
+        ObservableCollection<string> SnapImageTypes { get; set; }
         FilterInfo SnapFilter { get; set; }
         int SnapGain { get; set; }
         bool SnapSave { get; set; }
